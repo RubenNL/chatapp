@@ -15,7 +15,12 @@ export default class Connection {
 		this.subscribers.push(listener)
 	}
 	_onMessage(message) {
-		message=JSON.parse(message.data);
+		message=message.data
+		if(message.length==0) {
+			this.rws.send('')
+			return
+		}
+		message=JSON.parse(message);
 		this.subscribers.forEach(subscriber=>subscriber(message));
 		if(message.type=="encrypted") this.encryption.decrypt(message.message).then(message=>console.log(message))
 	}

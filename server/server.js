@@ -9,10 +9,12 @@ module.exports=(app,wss)=>{
 		const authentication=require('./authentication.js')(sequelize);		
 		app.post('/api/register',saveUser)
 		wss.on('connection',(ws,req)=>{
+			pingInterval=setInterval(()=>ws.send(''),45000) //ping
 			ws.userId=req.url.split('=')[1];
 			ws=>ws.authenticated=false
 			ws.authentication=authentication(ws.userId,ws.send.bind(ws))
 			ws.on('message',message=>{
+				if(message.length==0) return; //pong
 				message=JSON.parse(message)
 				if(!ws.authenticated) ws.authentication(message).then(status=>{
 					console.log('authStatus:',status)
@@ -25,7 +27,10 @@ module.exports=(app,wss)=>{
 				})
 				if(message.type=="sendTo") connections[message.dest].send(JSON.stringify({type:"encrypted",message:message.message}))
 			})
-			ws.on('close',()=>delete connections[ws.userId]);
+			ws.on('close',()=>{
+				clearInterval(pingInterval)
+				delete connections[ws.userId];
+			})
 		})
 	})
 }
