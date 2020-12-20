@@ -6,8 +6,8 @@ module.exports=sequelize=>{
 			defaultValue: Sequelize.UUIDV4,
 			primaryKey: true
 		},
-		publicKey: DataTypes.STRING,
-		signKey: DataTypes.STRING
+		publicKey: DataTypes.STRING(1024),
+		signKey: DataTypes.STRING(1024)
 	});
 	const Message=sequelize.define("messages",{
 		id: {
