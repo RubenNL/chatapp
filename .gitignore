@@ -1,0 +1,8 @@
+.idea
+node_modules
+npm-debug.log
+.DS_Store
+*.env
+*.iml
+output
+data.db
