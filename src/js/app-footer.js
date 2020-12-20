@@ -28,7 +28,7 @@ static get styles(){
 
 render() {
 	return html`
-			<a href="/images/github.png"><img src="https://github.com/RubenNL/chatapp" alt="Github link" width="50" height="50" class="align-content-center"/></a>
+			<a href="https://github.com/RubenNL/chatapp"><img src="/images/github.png" alt="Github link" width="50px" height="50px" class="align-content-center"/></a>
 			<p>© 2020 - Ruben van Dijk</p>
 		`;
 	}

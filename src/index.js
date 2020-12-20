@@ -6,7 +6,7 @@ router.setRoutes([
 	{
 		path: '/',
 		component: 'app-test',
-		action: ()=>import('js/app-register.js')
+		action: ()=>import('js/app-test.js')
 	}
 ]);
 import "js/app-header.js"

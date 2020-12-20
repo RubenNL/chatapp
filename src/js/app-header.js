@@ -8,7 +8,7 @@ class AppHeader extends LitElement {
 				<img src="/images/logo_512px.png" alt="" width="100px" height="100px">
 				<div class="logo-title">
 					<h1>Chatapp</h1>
-					<h3>gamaakt door Ruben van Dijk.</h3>
+					<h3>gemaakt door Ruben van Dijk.</h3>
 				</div>
 			</a>`;
 	}
