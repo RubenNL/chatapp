@@ -1,7 +1,5 @@
-import CustomStorage from "./CustomStorage.js"
 export default class Encryption {
 	constructor() {
-		this._storage=new CustomStorage('encryptKey');
 		this._private
 		this._public
 	}
@@ -9,7 +7,7 @@ export default class Encryption {
 		return window.crypto.subtle.importKey("jwk",{"alg":"RSA-OAEP-256","e":"AQAB","ext":true,"key_ops":["encrypt"],"kty":"RSA","n":keyString},{name:"RSA-OAEP",hash:"SHA-256"},true,['encrypt'])
 	}
 	async load() {
-		const privateKeyJson=JSON.parse((this._storage.value?this._storage.value:await this.generate()))
+		const privateKeyJson=JSON.parse((window.localStorage.getItem('encryptKey')?window.localStorage.getItem('encryptKey'):await this.generate()))
 		return Promise.all([window.crypto.subtle.importKey("jwk",privateKeyJson,{name:"RSA-OAEP",hash:"SHA-256"},true,['decrypt']).then(key=>this._private=key),
 		this.publicStringToKey(privateKeyJson.n).then(key=>this._public=key)])
 	}
@@ -24,15 +22,14 @@ export default class Encryption {
 			true,
 			["encrypt", "decrypt"]
 		).then(keypair=>keypair.privateKey).then(privateKey=>window.crypto.subtle.exportKey('jwk',privateKey)).then(key=>JSON.stringify(key))
-		this._storage.value=key;
+		window.localStorage.setItem('encryptKey',key)
 		return key;
 	}
 	encrypt(key,message) {
 		const chunks=[]
 		message=JSON.stringify({message:message,from:me.id})
-		console.log(message)
 		for (var i = 0, charsLength = message.length; i < charsLength; i += 446) chunks.push(message.substring(i, i + 446));
-		return Promise.all(chunks.map(chunk=>this.encryptPart(key,chunk)))
+		return this.publicStringToKey(key).then(key=>Promise.all(chunks.map(chunk=>this.encryptPart(key,chunk))))
 	}
 	encryptPart(key,message) {
 		const textencoder=new TextEncoder();

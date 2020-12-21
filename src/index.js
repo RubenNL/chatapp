@@ -5,8 +5,12 @@ const router = new Router(outlet);
 router.setRoutes([
 	{
 		path: '/',
-		component: 'app-test',
-		action: ()=>import('js/app-test.js')
+		component: 'app-home',
+		action: ()=>import('js/app-home.js')
+	},{
+		path: '/chat/:id',
+		component: 'app-chat',
+		action: ()=>import('js/app-chat.js')
 	}
 ]);
 import "js/app-header.js"
@@ -23,13 +27,15 @@ import Encryption from "js/Encryption.js";
 import Sign from "js/Sign.js";
 
 import User from "js/User.js";
-import CustomStorage from "js/CustomStorage.js";
+//import UserList from "js/UserList.js";
 
+import db from "js/db.js";
+window.db=db;
 window.encryption=new Encryption();
 window.sign=new Sign();
 Promise.all([window.encryption.load(),window.sign.load()])
 .then(()=>new Register(window.encryption,window.sign)).then(()=>{
 	window.connection=new Connection(window.encryption);
 	window.authentication=new Authentication(connection,sign)
-	window.me=new User((new CustomStorage('userId')).value,"me",window.encryption._public)
+	window.me=new User(window.localStorage.getItem('userId'),"me",window.encryption._public.n)
 })

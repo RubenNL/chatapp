@@ -1,12 +1,13 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
-import CustomStorage from "./CustomStorage.js";
+import db from "./db.js"
 export default class Connection {
-	constructor(encryption) {
-		this.rws=new ReconnectingWebSocket((location.protocol=="http:"?'ws://':'wss://')+(location+'').split('/')[2]+'/ws?user='+(new CustomStorage('userId')).value);
+	constructor(encryption,userList) {
+		this.rws=new ReconnectingWebSocket((location.protocol=="http:"?'ws://':'wss://')+(location+'').split('/')[2]+'/ws?user='+window.localStorage.getItem('userId'));
 		this.rws.addEventListener('open',this.onOpen);
 		this.rws.addEventListener('message',this._onMessage.bind(this));
 		this.subscribers=[];
 		this.encryption=encryption;
+		this.userList=userList;
 	}
 	onOpen() {
 		console.log('onOpen')
@@ -20,9 +21,12 @@ export default class Connection {
 			this.rws.send('')
 			return
 		}
+		console.log(message)
 		message=JSON.parse(message);
 		this.subscribers.forEach(subscriber=>subscriber(message));
-		if(message.type=="encrypted") this.encryption.decrypt(message.message).then(message=>console.log(message))
+		if(message.type=="encrypted") this.encryption.decrypt(message.message).then(message=>{
+			db.users.get(message.from).then(user=>user.received(message.message))
+		})
 	}
 	send(message) {
 		this.rws.send(JSON.stringify(message))

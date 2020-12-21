@@ -8,6 +8,7 @@ module.exports=(app,wss)=>{
 		const {getMessagesByUser,saveMessage} = require('./message.js')(sequelize);
 		const authentication=require('./authentication.js')(sequelize);		
 		app.post('/api/register',saveUser)
+		app.get('/api/user/:userId',(req,res)=>getUser(req.params.userId).then(user=>res.send(user.publicKey)))
 		wss.on('connection',(ws,req)=>{
 			pingInterval=setInterval(()=>ws.send(''),45000) //ping
 			ws.userId=req.url.split('=')[1];

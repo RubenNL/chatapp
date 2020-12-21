@@ -1,12 +1,10 @@
-import CustomStorage from "./CustomStorage.js"
 export default class Encryption {
 	constructor() {
-		this._storage=new CustomStorage('signKey');
 		this._private
 		this._public
 	}
 	async load() {
-		const privateKeyJson=JSON.stringify(JSON.parse((this._storage.value?this._storage.value:await this.generate())))
+		const privateKeyJson=JSON.stringify(JSON.parse((window.localStorage.getItem('signKey')?window.localStorage.getItem('signKey'):await this.generate())))
 		const publicKeyJson=JSON.parse(privateKeyJson)
 		delete publicKeyJson.d;
 		delete publicKeyJson.dp;
@@ -30,7 +28,7 @@ export default class Encryption {
 			true,
 			["sign", "verify"]
 		).then(keypair=>keypair.privateKey).then(privateKey=>window.crypto.subtle.exportKey('jwk',privateKey)).then(key=>JSON.stringify(key))
-		this._storage.value=key;
+		window.localStorage.setItem('signKey',key);
 		return key;
 	}
 	sign(message) {
