@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'lit-element';
+import db from "./db.js"
 
 export class appSidebarUser extends LitElement {
 	static get properties() {

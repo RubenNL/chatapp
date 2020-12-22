@@ -8,7 +8,7 @@ router.setRoutes([
 		component: 'app-home',
 		action: ()=>import('js/app-home.js')
 	},{
-		path: '/chat/:id',
+		path: '/chat/:userId',
 		component: 'app-chat',
 		action: ()=>import('js/app-chat.js')
 	}
@@ -30,7 +30,6 @@ import User from "js/User.js";
 //import UserList from "js/UserList.js";
 
 import db from "js/db.js";
-window.db=db;
 window.encryption=new Encryption();
 window.sign=new Sign();
 Promise.all([window.encryption.load(),window.sign.load()])

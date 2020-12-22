@@ -6,18 +6,18 @@ class User {
 		this.key=key;
 		db.users.put(this)
 	}
-	_storeMessage(message) {
-		return db.messages.put({user:this.id,message:message})
+	_storeMessage(message,received) {
+		return db.messages.put({user:this.id,message:message,received:received})
 	}
 	send(message) {
 		this.getKey().then(key=>window.encryption.encrypt(key,message)).then(message=>{
 			console.log(message)
 			window.connection.send({type:"sendTo",dest:this.id,message:message})
 		})
-		this._storeMessage(message);
+		this._storeMessage(message,false);
 	}
 	received(message) {
-		this._storeMessage(message);
+		this._storeMessage(message,true);
 		console.log('received from',this.id,message)
 	}
 	get messages() {

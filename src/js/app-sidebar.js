@@ -17,7 +17,14 @@ export class appSidebar extends LitElement {
 		})
 	}
 	render() {
-		return this.users.map(userId=>html`<app-sidebar-user userId="${userId}"></app-sidebar-user>`);
+		return html`
+			<div id="users">${this.users.map(userId=>html`<app-sidebar-user userId="${userId}"></app-sidebar-user>`)}</div>
+			<button @click="${this.addUser}">Nieuw contact</button>
+		`
+	}
+	addUser() {
+		const userId=prompt('userId')
+		if(userId) db.users.put({id:userId})
 	}
 }
 
