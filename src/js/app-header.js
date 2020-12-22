@@ -1,5 +1,5 @@
 import {css, html, LitElement} from 'lit-element';
-
+import db from './db.js';
 class AppHeader extends LitElement {
 	render() {
 		//language=HTML
@@ -10,9 +10,17 @@ class AppHeader extends LitElement {
 					<h1>Chatapp</h1>
 					<h3>gemaakt door Ruben van Dijk.</h3>
 				</div>
-			</a>`;
+			</a><button @click="${this.deleteAll}">delete alles(reload nodig!)</button>`;
 	}
-
+	deleteAll() {
+		db.delete().then(() => {
+			window.localStorage.clear();
+			alert('alles verwijderd!')
+		}).catch((err) => {
+			console.error("Could not delete database",err);
+			alert('error deleting!')
+		});
+	}
 	static get styles() {
 	//language=CSS
 	return css`
