@@ -32,6 +32,7 @@ export default {
 				{src:'src/service-worker.js',dest:'output'},
 				{src:'src/index.html',dest:'output'},
 				{src:'src/js/sendAuthenticated.js',dest:'output'},
+				{src:'robots.txt',dest:'output'},
 			]
 		}),
 		...production?[terser()]:[
