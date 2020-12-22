@@ -6,7 +6,8 @@ getMessagesByUser=id=>Message.findAll({
 	}
 })
 saveMessage=json=>Message.create(json)
+deleteMessagesByUser=userId=>Message.destroy({where:{userId:userId}})
 module.exports=sequelize=>{
 	Message=sequelize.models.messages;
-	return {getMessagesByUser,saveMessage}
+	return {getMessagesByUser,saveMessage,deleteMessagesByUser}
 } 

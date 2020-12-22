@@ -25,7 +25,10 @@ export default class Connection {
 		message=JSON.parse(message);
 		this.subscribers.forEach(subscriber=>subscriber(message));
 		if(message.type=="encrypted") this.encryption.decrypt(message.message).then(message=>{
-			db.users.get(message.from).then(user=>user.received(message.message))
+			db.users.get(message.from).then(user=>{
+				if(user==null) return db.users.put({id:message.from}).then(()=>db.users.get(message.from))
+				return user;
+			}).then(user=>user.received(message.message))
 		})
 	}
 	send(message) {

@@ -5,7 +5,7 @@ const connections={}
 module.exports=(app,wss)=>{
 	return require('./tables.js')(sequelize).then(()=>{
 		const {getUser,saveUser} = require('./user.js')(sequelize);
-		const {getMessagesByUser,saveMessage} = require('./message.js')(sequelize);
+		const {getMessagesByUser,saveMessage,deleteMessagesByUser} = require('./message.js')(sequelize);
 		const authentication=require('./authentication.js')(sequelize);		
 		app.post('/api/register',saveUser)
 		app.get('/api/user/:userId',(req,res)=>getUser(req.params.userId).then(user=>res.send(user.publicKey)))
@@ -22,11 +22,17 @@ module.exports=(app,wss)=>{
 					if(status) {
 						ws.authenticated=true
 						connections[ws.userId]=ws
+						getMessagesByUser(ws.userId).then(messages=>{
+							messages.forEach(message=>ws.send(JSON.stringify({type:"encrypted",message:JSON.parse(message.message)})))
+						}).then(()=>deleteMessagesByUser(ws.userId))
 					} else ws.close();
 					delete ws.authentication;
 					return;
 				})
-				if(message.type=="sendTo") connections[message.dest].send(JSON.stringify({type:"encrypted",message:message.message}))
+				if(message.type=="sendTo") {
+					if(connections[message.dest]) connections[message.dest].send(JSON.stringify({type:"encrypted",message:message.message}))
+					else saveMessage({userId:message.dest,message:JSON.stringify(message.message)})
+				}
 			})
 			ws.on('close',()=>{
 				clearInterval(pingInterval)
