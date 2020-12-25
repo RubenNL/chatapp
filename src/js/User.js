@@ -4,9 +4,12 @@ class User {
 		this.id=id;
 		this.name=name;
 		this.key=key;
-		db.users.put(this)
+		db.users.get(id).then(user=>{
+			if(!user) tb.users.put(this)
+		})
 	}
 	_storeMessage(message,received) {
+		db.users.update(this.id,{lastMessage:JSON.stringify({message:message,received:received})})
 		return db.messages.put({user:this.id,message:message,received:received})
 	}
 	send(message) {

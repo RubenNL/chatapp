@@ -9,7 +9,8 @@ class AppChat extends LitElement {
 			userId: {type: String},
 			messages: {type: Array},
 			value: {type:String},
-			user: {type:User}
+			user: {type:User},
+			name: {type:String}
 		};
 	}
 	constructor() {
@@ -27,12 +28,18 @@ class AppChat extends LitElement {
 		this.userId=location.params.userId
 		//TODO limit to last ~10 messages, lazy loading.
 		db.messages.where({user:this.userId}).toArray().then(messages=>this.messages=messages)
-		db.users.get(this.userId).then(user=>this.user=user)
-		console.log(this.messages)
+		db.users.get(this.userId).then(user=>{
+			this.user=user
+			this.name=this.user.name;
+		})
+		db.users.hook('updating',(modifications,primKey,obj,transaction)=>{
+			if(primKey!=this.userId) return
+			if(modifications.name) this.name=modifications.name;
+		})
 	}
 	render() {
 		//language=HTML
-		return html`<h1>${this.userId}</h1>
+		return html`<h1>${this.name||this.userId}</h1>
 		<ul class="chatMessages">${
 			this.messages.map(message=>html`<li class="chatMessage ${message.received?"him":"me"}">${message.message}</li>`)
 		}</ul>
