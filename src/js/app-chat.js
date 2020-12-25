@@ -26,8 +26,8 @@ class AppChat extends LitElement {
 	}
 	onBeforeEnter(location, commands, router){
 		this.userId=location.params.userId
-		//TODO limit to last ~10 messages, lazy loading.
-		db.messages.where({user:this.userId}).toArray().then(messages=>this.messages=messages)
+		//TODO lazy loading.
+		db.messages.where({user:this.userId}).reverse().limit(10).toArray().then(messages=>this.messages=messages.reverse())
 		db.users.get(this.userId).then(user=>{
 			this.user=user
 			this.name=this.user.name;
