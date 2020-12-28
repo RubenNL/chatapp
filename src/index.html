@@ -39,7 +39,31 @@
 <script type="module" src="/index.js"></script>
 <script>
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(sw=>window.sw=sw);
+		Promise.all([navigator.serviceWorker.register('/service-worker.js', { scope: '/' }),fetch('/api/notification').then(response=>response.text())]).then(items=>{
+			window.sw=items[0]
+			base64String=items[1]
+			const padding = '='.repeat((4 - base64String.length % 4) % 4);
+			const base64 = (base64String + padding)
+			.replace(/-/g, '+')
+			.replace(/_/g, '/');
+
+			const rawData = window.atob(base64);
+			const outputArray = new Uint8Array(rawData.length);
+
+			for (let i = 0; i < rawData.length; ++i) {
+				outputArray[i] = rawData.charCodeAt(i);
+			}
+			return items[0].pushManager.subscribe({
+				userVisibleOnly: true,
+				applicationServerKey: outputArray
+			})
+		}).then(subscription=>{
+			return {
+				endpoint:subscription.endpoint,
+				auth:subscription.keys.auth,
+				key:subscription.keys.p256dh
+			}
+		}).then(data=>console.log(data))
 	}
 </script>
 </body>

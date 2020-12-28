@@ -6,9 +6,11 @@ module.exports=(app,wss)=>{
 	return require('./tables.js')(sequelize).then(()=>{
 		const {getUser,saveUser} = require('./user.js')(sequelize);
 		const {getMessagesByUser,saveMessage,deleteMessagesByUser} = require('./message.js')(sequelize);
-		const authentication=require('./authentication.js')(sequelize);		
+		const {getPushkey} = require('./notifications.js')();
+		const authentication=require('./authentication.js')(sequelize);
 		app.post('/api/register',saveUser)
 		app.get('/api/user/:userId',(req,res)=>getUser(req.params.userId).then(user=>res.send(user.publicKey)))
+		app.get('/api/notification',(req,res)=>res.send(getPushkey()))
 		wss.on('connection',(ws,req)=>{
 			pingInterval=setInterval(()=>ws.send(''),45000) //ping
 			ws.userId=req.url.split('=')[1];
