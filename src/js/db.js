@@ -1,10 +1,12 @@
 import Dexie from 'dexie';
-const random=Math.random()*10000
-//import relationships from 'dexie-relationships'
-const db = new Dexie('storage') //, {addons: [relationships]}
+const db = new Dexie('storage')
 db.version(1).stores({
 	users: `id, name`,
 	messages:`++,user` // -> user.id
 });
-console.log('random:',random)
+db.open().catch(e=>{
+	console.log('DB error:',e)
+	alert('DB error')
+	alert('unable to run in incognito, or browser is not supported.')
+})
 export default db;
