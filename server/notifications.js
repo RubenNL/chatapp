@@ -26,8 +26,10 @@ notificationRegister=(req,res)=>{
 			p256dh: body.p256dh
 		}
 	};
-
-	webpush.sendNotification(pushSubscription, JSON.stringify({title:'hoi!',options:{}})).catch(err=>{console.log(err)});
+	webpush.sendNotification(pushSubscription, JSON.stringify({title:'hoi!',options:{}})).catch(err=>{
+		console.log('error sending notification:',err)
+		res.status(400).send('error sending notification')
+	});
 }
 module.exports=()=>{
 	return {getPushkey,notificationRegister}

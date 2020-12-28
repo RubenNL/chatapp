@@ -67,7 +67,7 @@
 			})
 			return fetch('/api/notification',{method:'POST',headers:{'Content-Length':message.length,'Content-Type':'application/json'},body:message})
 		}).then(response=>console.log(response))
-	}
+	} else alert('service worker not supported. some features might not work.')
 </script>
 </body>
 </html>
