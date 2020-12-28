@@ -1,5 +1,5 @@
 self.addEventListener('fetch', function(event) {
-	if(event.request.destination!=="") {
+	if(event.request.destination!=="" && !event.request.url.contains('/code')) {
 		event.respondWith(
 			caches.open('chatapp').then(function(cache) {
 				if(event.request.destination=="document") {

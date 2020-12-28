@@ -17,6 +17,7 @@
     "node-webcrypto-ossl": "^2.1.2",
     "pg": "^8.5.1",
     "sequelize": "^6.3.5",
+    "serve-index": "^1.9.1",
     "ws": "^7.4.1"
   },
   "devDependencies": {

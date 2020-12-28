@@ -30,6 +30,7 @@ render() {
 	return html`
 			<a href="https://github.com/RubenNL/chatapp"><img src="/images/github.png" alt="Github link" width="50px" height="50px" class="align-content-center"/></a>
 			<p>© 2020 - Ruben van Dijk</p>
+			<a href="/code" target="_top">Code op de server</a>
 		`;
 	}
 
