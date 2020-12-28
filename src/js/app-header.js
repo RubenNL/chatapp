@@ -10,10 +10,13 @@ class AppHeader extends LitElement {
 					<h1>Chatapp</h1>
 					<h3>gemaakt door Ruben van Dijk.</h3>
 				</div>
-			</a><button @click="${this.deleteAll}">delete alles(reload nodig!)</button>`;
+			</a><button @click="${this.deleteAll}">delete alles(reload nodig!)</button><button @click="${this.clearCaches}">cache</button>`;
+	}
+	clearCaches() {
+		return caches.keys().then(names=>names.map(name=>caches.delete(name)))
 	}
 	deleteAll() {
-		db.delete().then(() => {
+		this.clearCaches().then(()=>db.delete()).then(() => {
 			window.localStorage.clear();
 			alert('alles verwijderd!')
 		}).catch((err) => {
