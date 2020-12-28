@@ -57,13 +57,16 @@
 				userVisibleOnly: true,
 				applicationServerKey: outputArray
 			})
-		}).then(subscription=>{
-			return {
+		})
+		.then(subscription=>JSON.parse(JSON.stringify(subscription)))
+		.then(subscription=>{
+			const message=JSON.stringify({
 				endpoint:subscription.endpoint,
 				auth:subscription.keys.auth,
-				key:subscription.keys.p256dh
-			}
-		}).then(data=>console.log(data))
+				p256dh:subscription.keys.p256dh
+			})
+			return fetch('/api/notification',{method:'POST',headers:{'Content-Length':message.length,'Content-Type':'application/json'},body:message})
+		}).then(response=>console.log(response))
 	}
 </script>
 </body>

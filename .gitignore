@@ -6,3 +6,4 @@ npm-debug.log
 *.iml
 output
 data.db
+vapidKeys.json

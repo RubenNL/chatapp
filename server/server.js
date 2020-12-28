@@ -11,6 +11,7 @@ module.exports=(app,wss)=>{
 		app.post('/api/register',saveUser)
 		app.get('/api/user/:userId',(req,res)=>getUser(req.params.userId).then(user=>res.send(user.publicKey)))
 		app.get('/api/notification',(req,res)=>res.send(getPushkey()))
+		app.post('/api/notification',notificationRegister)
 		wss.on('connection',(ws,req)=>{
 			pingInterval=setInterval(()=>ws.send(''),45000) //ping
 			ws.userId=req.url.split('=')[1];
