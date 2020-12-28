@@ -16,11 +16,11 @@ class AppHeader extends LitElement {
 		return caches.keys().then(names=>names.map(name=>caches.delete(name)))
 	}
 	deleteAll() {
-		this.clearCaches().then(()=>db.delete()).then(() => {
-			window.localStorage.clear();
+		Promise.all([window.sw.unregister(),this.clearCaches(),db.delete()]).then((list)=>{
+			if(list[0]) window.localStorage.clear();
 			alert('alles verwijderd!')
 		}).catch((err) => {
-			console.error("Could not delete database",err);
+			console.error("Could not delete everything:",err);
 			alert('error deleting!')
 		});
 	}

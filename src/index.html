@@ -14,6 +14,7 @@
 </head>
 <body>
 <noscript>JS is niet ingeschakeld.</noscript>
+<span id="offline">App is nog niet volledig in de cache geladen. Ga online en ververs de pagina om hem ook offline te kunnen gebruiken.</span>
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-12">
@@ -38,7 +39,7 @@
 <script type="module" src="/index.js"></script>
 <script>
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+		navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).then(sw=>window.sw=sw);
 	}
 </script>
 </body>

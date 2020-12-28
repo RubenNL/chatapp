@@ -15,8 +15,5 @@ function shouldCompress (req, res) {
 app.use(express.static('output'))
 
 require('./server/server.js')(app,wss)
-.then(()=>{
-	app.use((req,res)=>res.sendFile(__dirname+'/output/index.html'))
-})
 
 server.listen(process.env.PORT||8000)

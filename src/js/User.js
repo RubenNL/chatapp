@@ -3,14 +3,14 @@ class User {
 	constructor(id,name,key) {
 		this.id=id;
 		this.name=name;
-		this.key=key;
+		this._key=key;
 		db.users.get(id).then(user=>{
-			if(!user) tb.users.put(this)
+			if(!user) db.users.put(this)
 		})
 	}
 	_storeMessage(message,received) {
 		db.users.update(this.id,{lastMessage:JSON.stringify({message:message,received:received})})
-		return db.messages.put({user:this.id,message:message,received:received})
+		return db.messages.put({user:this.id,message:message,received:received,date:+new Date})
 	}
 	send(message) {
 		this.getKey().then(key=>window.encryption.encrypt(key,message)).then(message=>{
@@ -29,7 +29,7 @@ class User {
 	}
 	downloadKey() {
 		return fetch('/api/user/'+this.id).then(response=>response.text()).then(key=>{
-			this.key=key
+			this._key=key
 			return key
 		})
 	}

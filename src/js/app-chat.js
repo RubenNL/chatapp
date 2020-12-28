@@ -41,7 +41,7 @@ class AppChat extends LitElement {
 		//language=HTML
 		return html`<h1>${this.name||this.userId}</h1>
 		<ul class="chatMessages">${
-			this.messages.map(message=>html`<li class="chatMessage ${message.received?"him":"me"}">${message.message}</li>`)
+			this.messages.map(message=>html`<li class="chatMessage ${message.received?"him":"me"} ${message.date>window.connection.lastConnection?'after':'before'}">${message.message}</li>`)
 		}</ul>
 		<form @submit="${this.submit}">
 			<input .value="${this.value}" @change="${this.onChange}">
@@ -110,6 +110,12 @@ class AppChat extends LitElement {
 			}
 			.him:first-of-type {
 				border-bottom-left-radius: 5px;
+			}
+			.me.after {
+				background-color: red;
+			}
+			.me.before {
+				background-color: blue;
 			}`
 	}
 }

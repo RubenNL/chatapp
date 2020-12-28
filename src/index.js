@@ -1,5 +1,5 @@
 import {Router} from '@vaadin/router';
-
+document.querySelector('#offline').remove()
 const outlet = document.querySelector('main');
 const router = new Router(outlet);
 router.setRoutes([
