@@ -18,7 +18,7 @@
     "pg": "^8.5.1",
     "sequelize": "^6.3.5",
     "serve-index": "^1.9.1",
-    "ws": "^7.4.1"
+    "ws": "^8.4.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
