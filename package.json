@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
-    "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
     "@vaadin/router": "^1.7.2",
     "dexie": "^3.0.3",
     "dexie-relationships": "^1.2.11",
